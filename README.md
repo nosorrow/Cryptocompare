@@ -30,7 +30,7 @@ http://haspel.000webhostapp.com/cryptocompare/sample-page.php
 #### HTML
 ```
 <! -- контейнер някъде в страницата -->
-<div class="currency-ticker" style="position: fixed;">
+<div id="ticker_container" class="currency-ticker_container" style="">
     <ul id="currency_ticker_list"></ul>
 </div>
 ```
