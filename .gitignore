@@ -1,0 +1,6 @@
+src/
+tmp/
+test/
+cryptocurrency/
+cryptocompare/coins
+get-logos.php
