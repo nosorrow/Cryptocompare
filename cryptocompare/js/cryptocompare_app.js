@@ -55,10 +55,11 @@ function cryptoCurrencyPriceTicker(opt) {
             currency_list += '<span style="' + arrow_style + '"><sup> ' + arrow + ' ' + percent_change.toFixed(2) + '%' + '</sup></span>';
             // End list
             currency_list += "</li>";
-            console.log(currency_list)
             $("#currency_ticker_list").append(currency_list);
 
-            console.log(coin_name + ': ' + price + '=' + price2);
+            // console.log(currency_list)
+
+          //  console.log(coin_name + ': ' + price + '=' + price2);
 
         });
 
@@ -137,16 +138,60 @@ function CurrencyTicker(options) {
 // For Blockchain.bg
 
 function errorHandler(obj) {
-    $.ajax({
-        url: "http://my.manu/Cryptocompare-app/cryptocompare/php/mailto.php",
-        method: "POST",
-        data: {object:obj},
-        success: function (result) {
-            if (result == 1){
-                $("#currency-ticker_container").hide();
-            }
-        }
 
-    });
+    var cryptoerror = getCookie("cryptoerror");
+
+    if (cryptoerror == 1) {
+
+        console.log('%c An unexpected error has occurred from cryptocompare API: ' + obj.Message , 'background: red; color: #fff; fon-size:12px');
+        $("#currency-ticker_container").hide();
+
+    } else {
+
+        setCookie("cryptoerror", 1, 1);
+
+        console.log('%c An unexpected error has occurred from cryptocompare API: ' + obj.Message , 'background: red; color: #fff;' +
+            ' fon-size:12px');
+
+        $.ajax({
+            url: "http://my.manu/Cryptocompare-app/cryptocompare/php/mailto.php",
+            method: "POST",
+            data: {object:obj},
+            success: function (result) {
+
+                if (result == 1){
+
+                    $("#currency-ticker_container").hide();
+                }
+            }
+
+        });
+
+    }
 
 }
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+
