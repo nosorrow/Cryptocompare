@@ -24,9 +24,12 @@ function cryptoCurrencyPriceTicker(opt) {
         if (data.Response == "Error") {
             errorHandler(data);
             return;
+        } else {
+            setCookie('cryptoerror', 0);
         }
 
         $.each(data.RAW, function (key, val) {
+
             var arrow, arrow_style, currency_list;
             var coin = val.EUR;
             var coin_name = criptocurrencies[key];
@@ -193,5 +196,3 @@ function getCookie(cname) {
     }
     return "";
 }
-
-
