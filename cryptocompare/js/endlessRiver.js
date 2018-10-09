@@ -49,7 +49,7 @@ jQuery.fn.endlessRiver = function (settings) {
         //BOOT
         currentSpazio = $line.children("li:first").outerWidth(true);
         currentTempo = currentSpazio / settings.speed * 1000;
-        //x 1000 perchè tempo è in millisecondi
+        //x 1000 perchÐ¸ tempo Ð¸ in millisecondi
         scrollnews(currentSpazio, currentTempo);
 		function setHover(){
 			$line.hover(pause,resume);

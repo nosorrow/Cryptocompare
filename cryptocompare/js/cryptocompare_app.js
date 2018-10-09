@@ -10,10 +10,10 @@ function cryptoCurrencyPriceTicker(opt) {
     var url = "https://min-api.cryptocompare.com/data/pricemultifull?" + fsyms + "&tsyms=" + opt.tosymbol + "&e=" + opt.market;
 
     $("#currency-ticker_container").addClass('currency-ticker_container');
-    if(opt.ticker_container_position == "top"){
+    if (opt.ticker_container_position == "top") {
         $("#currency-ticker_container").css('top', 0);
     }
-    else if(opt.ticker_container_position == "bottom"){
+    else if (opt.ticker_container_position == "bottom") {
         $("#currency-ticker_container").css('bottom', 0);
     } else {
         alert('WRONG {ticker_container_position} ! ');
@@ -22,7 +22,7 @@ function cryptoCurrencyPriceTicker(opt) {
     $.getJSON(url, function (data) {
         // Fuck up view READMY.md
         if (data.Response == "Error") {
-            alert('Response: ERROR "' + data.Message + '"');
+            errorHandler(data);
             return;
         }
 
@@ -46,8 +46,8 @@ function cryptoCurrencyPriceTicker(opt) {
             // start list
             currency_list = "<li>";
             // add image
-            currency_list += "<span>" + '<img style="margin-bottom: 3px; width: ' + opt.icon_width + '" id="' + coin.FROMSYMBOL
-                + '" alt="' + coin.FROMSYMBOL + '" ' + src + '>' + "</span>";
+            currency_list += '<img style="margin-bottom: 3px; height: ' + opt.icon_height + '" id="' + coin.FROMSYMBOL
+                + '" alt="' + coin.FROMSYMBOL + '" ' + src + '> ';
             // add coin info
             currency_list += "<span> " + coin_name + " (" + coin.FROMSYMBOL + ")" + " : " + price2 + opt.display_symbol
                 + "</span>";
@@ -81,11 +81,11 @@ var options_default = {
     exchange_rate: 1.95583,
     ticker_container: '.currency-ticker_container',
     ticker_container_position: 'top', // or 'bottom'
-    icon_width: '20px',
+    icon_height: '20px',
     percent_down_style: 'color:red;',
     percent_up_style: 'color:green;',
     arrow_up: '<i class="fas fa-arrow-up"></i>',
-    arrow_down : '<i class="fas fa-arrow-down"></i>',
+    arrow_down: '<i class="fas fa-arrow-down"></i>',
     // Rotation
     rotation_speed: 52,
     //Refresh time in miliseconds
@@ -95,7 +95,7 @@ var options_default = {
 
 function parseOptionProperties(opt) {
 
-    if (jQuery.isEmptyObject(opt)){
+    if (jQuery.isEmptyObject(opt)) {
         return options_default;
     }
 
@@ -103,9 +103,9 @@ function parseOptionProperties(opt) {
     var propertyes = Object.getOwnPropertyNames(options_default);
 
     $.each(propertyes, function (key, val) {
-       if(!opt.hasOwnProperty(val)){
-           opt[val] = options_default[val];
-       }
+        if (!opt.hasOwnProperty(val)) {
+            opt[val] = options_default[val];
+        }
     });
 
     return opt;
@@ -122,7 +122,7 @@ function CurrencyTicker(options) {
 
     cryptoCurrencyPriceTicker(opt);
 
-    if (opt.refresh !== false){
+    if (opt.refresh !== false) {
         var op = opt;
         $(function () {
             setInterval(function () {
@@ -131,5 +131,22 @@ function CurrencyTicker(options) {
             }, op.refresh) // 5 min
         });
     }
+
+}
+
+// For Blockchain.bg
+
+function errorHandler(obj) {
+    $.ajax({
+        url: "http://my.manu/Cryptocompare-app/cryptocompare/php/mailto.php",
+        method: "POST",
+        data: {object:obj},
+        success: function (result) {
+            if (result == 1){
+                $("#currency-ticker_container").hide();
+            }
+        }
+
+    });
 
 }
