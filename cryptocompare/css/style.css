@@ -1,6 +1,8 @@
 /* Sticky footer styles
 -------------------------------------------------- */
-
+body{
+    margin-bottom: 58px;
+}
 .currency-ticker_container {
     position: fixed;
     width: 100%;
